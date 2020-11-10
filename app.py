@@ -82,14 +82,20 @@ class Shows(db.Model):
     artist_id = db.Column(db.Integer, db.ForeignKey(Artist.id), nullable=False)
     start_time = db.Column(db.Date, nullable=True)
 
+#trying to figure out best way to serialize this since it seems like a redundnacy in
+#database to add artise and venue name to show table.  So do I query in the serialize function???
+#what's the best practice here???????????????????????????
     def serialize(self):
+        artist_name = Artist.query.filter(Artist.id==self.artist_id).first().name
+        venue = Venue.query.filter(Venue.id==self.venue_id).first().name
+        print("In Serialize and here is artist name and venue:",artist_name,venue)
         return {
             'id':self.id,
             'start_time': self.start_time,
             'venue_id': self.venue_id,
             'artist_id': self.artist_id,
-           # 'artist_name': self.artist.name,
-           # 'venue_name': self.venue.name
+            'artist_name': artist_name,
+            'venue_name': venue
         }
 
 
