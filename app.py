@@ -152,12 +152,14 @@ def show_venue(venue_id):
     "facebook_link": venue.facebook_link,
     #"seeking_talent": venue.seeking_talent,
     #"seeking_description": venue.seeking_description,
-    #"image_link": venue.image_link,
+    "image_link": venue.image_link,
     #"past_shows": venue.past_shows,
     #"upcoming_shows": venue.upcoming_shows,
     #"past_shows_count": venue.past_shows_count,
     #"upcoming_shows_count": venue.upcoming_shows_count
     }
+    print("This is what we have as teh data for this venue!",data)
+    print("And image link specifically:",type(data['image_link']))
     return render_template('pages/show_venue.html', venue=data)
  
 #  Create Venue
@@ -172,11 +174,11 @@ def create_venue_form():
 def create_venue_submission():
   name = request.form['name']
   address = request.form['address']
-  print("This is what we are getting as the address",address)
   phone = request.form['phone']
   genres = request.form['genres']
   city = request.form['city']
   state = request.form['state']
+  image_link=request.form['image_link']
 
   try:
       newVenue = Venue()
@@ -186,6 +188,8 @@ def create_venue_submission():
       newVenue.genres = genres
       newVenue.city = city
       newVenue.state = state
+      newVenue.image_link = image_link
+      print("This is the new Venue!!!!!!!!!!!!!!!!!!!!!!!!!11",newVenue.image_link)
       db.session.add(newVenue)
       db.session.commit()
       flash('Venue ' + request.form['name'] + ' was successfully listed!')
