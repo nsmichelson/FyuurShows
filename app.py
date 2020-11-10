@@ -27,17 +27,11 @@ from sqlalchemy import func
 # App Config.
 #----------------------------------------------------------------------------#
 
-# TODO: connect to a local postgresql database
-
-
 app = Flask(__name__)
-#need to import the flask app from app.py??????????
 moment = Moment(app)
 app.config.from_object('config')
 db = SQLAlchemy(app)
 migrate = Migrate(app,db)
-
-
 
 #----------------------------------------------------------------------------#
 # Models.
@@ -56,7 +50,6 @@ class Venue(db.Model):
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
     shows = db.relationship('Shows', backref="Venue",lazy=True)
-
 
 
 class Artist(db.Model):
@@ -98,7 +91,6 @@ class Shows(db.Model):
             'venue_name': venue
         }
 
-
 #----------------------------------------------------------------------------#
 # Filters.
 #----------------------------------------------------------------------------#
@@ -119,52 +111,34 @@ def index():
   return render_template('pages/home.html')
 
 
-#  Venues
-#  ----------------------------------------------------------------
-
 @app.route('/venues')
 def venues():
-  showArtist = Shows.query.join('Artist').all()
-  artistID = showArtist[1].artist_id
-  print(Artist.query.filter(Artist.id==artistID, Shows.id==1)[0].name)
   areas = []
   distinct_city_state = Venue.query.distinct(Venue.city, Venue.state).all()
   for dcs in distinct_city_state:
     dcs.venues = Venue.query.filter(Venue.city==dcs.city,Venue.state==dcs.state)
     areas.append(dcs)
-  print("this is what we are returning!!!!!",areas)
-     
   return render_template('pages/venues.html', areas = areas)
  
 
 @app.route('/venues/search', methods=['POST'])
 def search_venues():
-    #get the search term from the post request body
     search_term = request.form.get('search_term')
- 
     likeSearch = '%' + search_term + '%'
     response_results = Venue.query.filter(Venue.name.like(likeSearch))
     response={
     "results": response_results
     }
     #jsoned_response= jsonify(response)
-
     return render_template('pages/search_venues.html', results=response, search_term=request.form.get('search_term', ''))
+
 
 @app.route('/venues/<int:venue_id>')
 def show_venue(venue_id):
     venue = Venue.query.get(venue_id)
-    print("the genres for this venue are",venue.genres)
-
-    #joined = Venue.query.join('Shows')
-    showData = []
-    
+    showData = []    
     for show in venue.shows:
-        print("Here in venue id")
-        print(show.serialize())
         showData.append(show.serialize())
-
-
     data = {
     "id": venue_id,
     "name": venue.name,
