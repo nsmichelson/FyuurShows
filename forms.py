@@ -1,9 +1,8 @@
+
 from datetime import datetime
 from flask_wtf import Form
 from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField
 from wtforms.validators import DataRequired, AnyOf, URL
-
-
 
 class ShowForm(Form):
     artist_id = StringField(
@@ -218,5 +217,6 @@ class ArtistForm(Form):
         # TODO implement enum restriction
         'facebook_link', validators=[URL()]
     )
+
 
 # TODO IMPLEMENT NEW ARTIST FORM AND NEW SHOW FORM

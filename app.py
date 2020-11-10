@@ -77,10 +77,20 @@ class Shows(db.Model):
     __tablename__ = 'Shows'
 
     id = db.Column(db.Integer, primary_key=True)
-#    name = db.Column(db.String)
+    start_time = db.Column(db.Date, nullable=True)
     venue_id = db.Column(db.Integer, db.ForeignKey(Venue.id), nullable=False)
     artist_id = db.Column(db.Integer, db.ForeignKey(Artist.id), nullable=False)
     start_time = db.Column(db.Date, nullable=True)
+
+    def serialize(self):
+        return {
+            'id':self.id,
+            'start_time': self.start_time,
+            'venue_id': self.venue_id,
+            'artist_id': self.artist_id,
+           # 'artist_name': self.artist.name,
+           # 'venue_name': self.venue.name
+        }
 
 
 #----------------------------------------------------------------------------#
@@ -116,6 +126,7 @@ def venues():
   for dcs in distinct_city_state:
     dcs.venues = Venue.query.filter(Venue.city==dcs.city,Venue.state==dcs.state)
     areas.append(dcs)
+  print("this is what we are returning!!!!!",areas)
      
   return render_template('pages/venues.html', areas = areas)
  
@@ -139,6 +150,15 @@ def show_venue(venue_id):
     venue = Venue.query.get(venue_id)
     print("the genres for this venue are",venue.genres)
 
+    #joined = Venue.query.join('Shows')
+    showData = []
+    
+    for show in venue.shows:
+        print("Here in venue id")
+        print(show.serialize())
+        showData.append(show.serialize())
+
+
     data = {
     "id": venue_id,
     "name": venue.name,
@@ -147,6 +167,7 @@ def show_venue(venue_id):
     "city": venue.city,
     "state": venue.state,
     "phone": venue.phone,
+    "shows":showData,
     #"website": venue.website,
     "facebook_link": venue.facebook_link,
     #"seeking_talent": venue.seeking_talent,
@@ -371,6 +392,10 @@ def create_artist_submission():
 @app.route('/shows')
 def shows():
     showData = Shows.query.all()
+    data = []
+    for show in showData:
+        data.append(show.serialize())
+        print("Here is a show!!!!!!! WOWOWOWOOWOWOW",show.serialize())
     return render_template('pages/shows.html', shows=showData)
 
 

@@ -5,3 +5,4 @@ flask-wtf
 flask_migrate
 sqlalchemy
 psycopg2
+wtforms
