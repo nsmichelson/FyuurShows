@@ -401,8 +401,7 @@ def shows():
     data = []
     for show in showData:
         data.append(show.serialize())
-        print("Here is a show!!!!!!! WOWOWOWOOWOWOW",show.serialize())
-    return render_template('pages/shows.html', shows=showData)
+    return render_template('pages/shows.html', shows=data)
 
 
 
