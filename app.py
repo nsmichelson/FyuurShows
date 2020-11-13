@@ -23,6 +23,7 @@ from flask_wtf import Form
 from forms import *
 from flask_migrate import Migrate
 from sqlalchemy import func
+from datetime import datetime
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
@@ -73,7 +74,7 @@ class Shows(db.Model):
     start_time = db.Column(db.Date, nullable=True)
     venue_id = db.Column(db.Integer, db.ForeignKey(Venue.id), nullable=False)
     artist_id = db.Column(db.Integer, db.ForeignKey(Artist.id), nullable=False)
-    start_time = db.Column(db.Date, nullable=True)
+    #start_time = db.Column(db.Date, nullable=True)
 
 #trying to figure out best way to serialize this since it seems like a redundnacy in
 #database to add artise and venue name to show table.  So do I query in the serialize function???
@@ -139,6 +140,22 @@ def show_venue(venue_id):
     showData = []    
     for show in venue.shows:
         showData.append(show.serialize())
+
+    today = datetime.today().date()
+    print("THIS IS TODAY!!!!!!!",today)
+    futureShows = []
+    pastShows = []
+    #find the shows that were past vs upcoming
+    #datetime.datetime to datetime.date
+    
+    for show in showData:
+        print ("show is",show)
+        print("show startime isL",show['start_time'])
+        if show['start_time'] > today:
+            futureShows.append(show)
+        else:
+            pastShows.append(show)
+
     data = {
     "id": venue_id,
     "name": venue.name,
@@ -147,16 +164,16 @@ def show_venue(venue_id):
     "city": venue.city,
     "state": venue.state,
     "phone": venue.phone,
-    "shows":showData,
+    #"shows":showData,
     #"website": venue.website,
     "facebook_link": venue.facebook_link,
     #"seeking_talent": venue.seeking_talent,
     #"seeking_description": venue.seeking_description,
     "image_link": venue.image_link,
-    #"past_shows": venue.past_shows,
-    #"upcoming_shows": venue.upcoming_shows,
-    #"past_shows_count": venue.past_shows_count,
-    #"upcoming_shows_count": venue.upcoming_shows_count
+    "past_shows": pastShows,
+    "upcoming_shows": futureShows,
+    "past_shows_count": len(pastShows),
+    "upcoming_shows_count": len(futureShows)
     }
     print("This is what we have as teh data for this venue!",data)
     print("And image link specifically:",type(data['image_link']))
