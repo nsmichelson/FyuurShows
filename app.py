@@ -280,7 +280,7 @@ def show_artist(artist_id):
     "facebook_link": artist_data.facebook_link,
     #"seeking_venue": artist_data.seeking_venue,
     #"seeking_description": artist_data.seeking_description,
-    #"image_link": artist_data.image_link,
+    "image_link": artist_data.image_link,
     #"past_shows": artist_data.past_shows,
     #"upcoming_shows": artist_data.upcoming_shows,
     #"past_shows_count": artist_data.past_shows_count,
@@ -307,7 +307,7 @@ def edit_artist(artist_id):
     "facebook_link": artistToEdit.facebook_link,
     #"seeking_venue": True,
     #"seeking_description": "Looking for shows to perform at in the San Francisco Bay Area!",
-    #"image_link": "https://images.unsplash.com/photo-1549213783-8284d0336c4f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80"
+    "image_link": artistToEdit.image_link
   }
   return render_template('forms/edit_artist.html', form=form, artist=artist)
 
@@ -366,6 +366,7 @@ def create_artist_submission():
     genres = request.form['genres']
     city = request.form['city']
     state = request.form['state']
+    image_link = request.form['image_link']
 
     try:
         newArtist = Artist()
@@ -373,6 +374,7 @@ def create_artist_submission():
         newArtist.genres = genres
         newArtist.city = city
         newArtist.state = state
+        newArtist.image_link = image_link
         db.session.add(newArtist)
         db.session.commit()
         flash('Artist ' + request.form['name'] + ' was successfully listed!')
