@@ -266,9 +266,11 @@ def search_artists():
 
   return render_template('pages/search_artists.html', results=response, search_term=request.form.get('search_term', ''))
 
-@app.route('/artists/<int:artist_id>')
+@app.route('/artists/<int:artist_id>', methods=['GET'])
 def show_artist(artist_id):
     artist_data = Artist.query.get(artist_id)
+    print("THIS IS WHAT WE haVE:",artist_data)
+    
     data={
     "id": artist_data.id,
     "name": artist_data.name,
@@ -286,6 +288,7 @@ def show_artist(artist_id):
     #"past_shows_count": artist_data.past_shows_count,
     #"upcoming_shows_count": artist_data.upcoming_shows_count
     }
+    print("THIS IS WHAT WE HAVE FOR ARTIST DATA:",data)
     return render_template('pages/show_artist.html', artist=data)
 
 
@@ -299,7 +302,7 @@ def edit_artist(artist_id):
   artist={
     "id": artistToEdit.id,
     "name": artistToEdit.name,
-    #"genres": artistToEdit.genres,
+    "genres": artistToEdit.genres,
     "city": artistToEdit.city,
     "state": artistToEdit.state,
     "phone": artistToEdit.phone,
