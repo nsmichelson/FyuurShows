@@ -376,6 +376,7 @@ def edit_venue_submission(venue_id):
   state = request.form['state']
   image_link = request.form['image_link']
   seeking_talent=request.form['seeking_talent']
+  print("This is the value we have retrieved for seeking talent!!!!!!!!!!!!!!!!!!!",seeking_talent)
 
   try:
       venueToEdit = Venue.query.get(venue_id)
