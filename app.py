@@ -50,6 +50,9 @@ class Venue(db.Model):
     phone = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
+    website = db.Column(db.String(500), nullable=True)
+    seeking_talent = db.Column(db.Boolean, default=True)
+    seeking_description= db.Column(db.String(200), nullable=True)
     shows = db.relationship('Shows', backref="Venue",lazy=True)
 
 
@@ -74,23 +77,22 @@ class Shows(db.Model):
     start_time = db.Column(db.Date, nullable=True)
     venue_id = db.Column(db.Integer, db.ForeignKey(Venue.id), nullable=False)
     artist_id = db.Column(db.Integer, db.ForeignKey(Artist.id), nullable=False)
-    #start_time = db.Column(db.Date, nullable=True)
 
 #trying to figure out best way to serialize this since it seems like a redundnacy in
 #database to add artise and venue name to show table.  So do I query in the serialize function???
 #what's the best practice here???????????????????????????
     def serialize(self):
         artist_name = Artist.query.filter(Artist.id==self.artist_id).first().name
-        venue = Venue.query.filter(Venue.id==self.venue_id).first().name
-        print("In Serialize and here is artist name and venue:",artist_name,venue)
+        venue_name = Venue.query.filter(Venue.id==self.venue_id).first().name
         artist_image_link = Artist.query.filter(Artist.id==self.artist_id).first().image_link
+        
         return {
             'id':self.id,
             'start_time': self.start_time,
             'venue_id': self.venue_id,
             'artist_id': self.artist_id,
             'artist_name': artist_name,
-            'venue_name': venue,
+            'venue_name': venue_name,
             "artist_image_link":artist_image_link
         }
 
@@ -99,9 +101,7 @@ class Shows(db.Model):
 #----------------------------------------------------------------------------#
 
 
-
 #return babel.dates.format_datetime(date, format, locale='en')
-
 
 #----------------------------------------------------------------------------#
 # Controllers.
@@ -147,11 +147,9 @@ def show_venue(venue_id):
     venue = Venue.query.get(venue_id)
     showData = []    
     for show in venue.shows:
-        print("HERE IS THE SERIALIZEEEEEEEEEEEEEEEED SHOW",show.serialize())
         showData.append(show.serialize())
 
     today = datetime.today().date()
-    print("THIS IS TODAY!!!!!!!",today)
     futureShows = []
     pastShows = []
     #find the shows that were past vs upcoming
@@ -161,7 +159,6 @@ def show_venue(venue_id):
         if show['start_time'] > today:
             futureShows.append(show)
         else:
-            print("POP CRACKLE POP:",show)
             pastShows.append(show)
 
     data = {
@@ -274,22 +271,14 @@ def search_artists():
 @app.route('/artists/<int:artist_id>', methods=['GET'])
 def show_artist(artist_id):
     artist_data = Artist.query.get(artist_id)
-    print("THIS IS WHAT WE haVE:",artist_data)
-
-    #shows_with_artist = Shows.query.filter(Shows.artist_id==artist_id).all()
-    #print("HERE ARE THE shows withe ARTIST!!!:",shows_with_artist)
-
 
     showData = []    
     for show in artist_data.shows:
         showData.append(show.serialize())
 
     today = datetime.today().date()
-    print("THIS IS TODAY!!!!!!!",today)
     futureShows = []
     pastShows = []
-    #find the shows that were past vs upcoming
-    #datetime.datetime to datetime.date
     
     for show in showData:
         if show['start_time'] > today:
@@ -315,7 +304,7 @@ def show_artist(artist_id):
     "past_shows_count": len(pastShows),
     "upcoming_shows_count": len(futureShows)
     }
-    print("THIS IS WHAT WE HAVE FOR ARTIST DATA:",data)
+
     return render_template('pages/show_artist.html', artist=data)
 
 
