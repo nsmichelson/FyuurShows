@@ -376,9 +376,12 @@ def edit_venue_submission(venue_id):
   state = request.form['state']
   image_link = request.form['image_link']
   #feel like there should be a better way to do this!!!!
-  seeking_talent=False
-  if request.form['seeking_talent']:
-      seeking_talent=True
+  #print("This is what we are getting from the request form:",request.form['seeking_talent'])
+  try:
+    boom = request.form['seeking_talent']
+    seeking_talent=True
+  except:
+    seeking_talent=False
 #  seeking_talent=request.form['seeking_talent']
 #  if seeking_talent:
 #      seeking_talent=True
