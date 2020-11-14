@@ -273,6 +273,28 @@ def search_artists():
 def show_artist(artist_id):
     artist_data = Artist.query.get(artist_id)
     print("THIS IS WHAT WE haVE:",artist_data)
+
+    #shows_with_artist = Shows.query.filter(Shows.artist_id==artist_id).all()
+    #print("HERE ARE THE shows withe ARTIST!!!:",shows_with_artist)
+
+
+    showData = []    
+    for show in artist_data.shows:
+        showData.append(show.serialize())
+
+    today = datetime.today().date()
+    print("THIS IS TODAY!!!!!!!",today)
+    futureShows = []
+    pastShows = []
+    #find the shows that were past vs upcoming
+    #datetime.datetime to datetime.date
+    
+    for show in showData:
+        if show['start_time'] > today:
+            futureShows.append(show)
+        else:
+            pastShows.append(show)
+
     
     data={
     "id": artist_data.id,
@@ -286,10 +308,10 @@ def show_artist(artist_id):
     #"seeking_venue": artist_data.seeking_venue,
     #"seeking_description": artist_data.seeking_description,
     "image_link": artist_data.image_link,
-    #"past_shows": artist_data.past_shows,
-    #"upcoming_shows": artist_data.upcoming_shows,
-    #"past_shows_count": artist_data.past_shows_count,
-    #"upcoming_shows_count": artist_data.upcoming_shows_count
+    "past_shows": pastShows,
+    "upcoming_shows": futureShows,
+    "past_shows_count": len(pastShows),
+    "upcoming_shows_count": len(futureShows)
     }
     print("THIS IS WHAT WE HAVE FOR ARTIST DATA:",data)
     return render_template('pages/show_artist.html', artist=data)
