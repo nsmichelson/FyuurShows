@@ -375,7 +375,15 @@ def edit_venue_submission(venue_id):
   city = request.form['city']
   state = request.form['state']
   image_link = request.form['image_link']
-  seeking_talent=request.form['seeking_talent']
+  #feel like there should be a better way to do this!!!!
+  seeking_talent=False
+  if request.form['seeking_talent']:
+      seeking_talent=True
+#  seeking_talent=request.form['seeking_talent']
+#  if seeking_talent:
+#      seeking_talent=True
+#  else:
+#      seeking_talent=False
   print("This is the value we have retrieved for seeking talent!!!!!!!!!!!!!!!!!!!",seeking_talent)
 
   try:
