@@ -111,6 +111,12 @@ class Shows(db.Model):
 def index():
   return render_template('pages/home.html')
 
+#have a theory about it going trhough flask and not being able to directly fetch an image from 
+# a file even if a legit route in the folder structure
+@app.route('/images/<image_file>')
+def image(image_file):
+    image_link = '/images/' + str(image_file)
+    return render_template(image_link)
 
 @app.route('/venues')
 def venues():
@@ -149,8 +155,6 @@ def show_venue(venue_id):
     #datetime.datetime to datetime.date
     
     for show in showData:
-        print ("show is",show)
-        print("show startime isL",show['start_time'])
         if show['start_time'] > today:
             futureShows.append(show)
         else:
@@ -206,7 +210,6 @@ def create_venue_submission():
       newVenue.city = city
       newVenue.state = state
       newVenue.image_link = image_link
-      print("This is the new Venue!!!!!!!!!!!!!!!!!!!!!!!!!11",newVenue.image_link)
       db.session.add(newVenue)
       db.session.commit()
       flash('Venue ' + request.form['name'] + ' was successfully listed!')
@@ -299,6 +302,7 @@ def show_artist(artist_id):
 def edit_artist(artist_id):
   form = ArtistForm()
   artistToEdit = Artist.query.get(artist_id)
+
   artist={
     "id": artistToEdit.id,
     "name": artistToEdit.name,
@@ -316,7 +320,30 @@ def edit_artist(artist_id):
 
 @app.route('/artists/<int:artist_id>/edit', methods=['POST'])
 def edit_artist_submission(artist_id):
-  return redirect(url_for('show_artist', artist_id=artist_id))
+    name = request.form['name']
+    genres = request.form['genres']
+    city = request.form['city']
+    state = request.form['state']
+    image_link = request.form['image_link']  
+
+    try:
+        artistToEdit = Artist.query.get(artist_id)
+        artistToEdit.name = name
+        artistToEdit.genres = genres
+        artistToEdit.city = city
+        artistToEdit.state = state
+        artistToEdit.image_link = image_link
+        db.session.add(artistToEdit)
+        db.session.commit()
+        flash('Artist ' + request.form['name'] + ' was successfully edited!')
+    except:
+        print("something went wrong")
+        db.session.rollback()
+        flash('An error occured! Artist ' + request.form['name'] + ' could not be edited')
+    finally:
+        db.session.close()
+
+    return redirect(url_for('show_artist', artist_id=artist_id))
 
 @app.route('/venues/<int:venue_id>/edit', methods=['GET'])
 def edit_venue(venue_id):
@@ -414,7 +441,6 @@ def create_shows():
 
 @app.route('/shows/create', methods=['POST'])
 def create_show_submission():
-#    name = request.form['name']
     artist_id = request.form['artist_id']
     venue_id = request.form['venue_id']
     start_time = request.form['start_time']
