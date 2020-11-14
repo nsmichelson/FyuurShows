@@ -1,7 +1,3 @@
-#----------------------------------------------------------------------------#
-# Imports
-#----------------------------------------------------------------------------#
-
 import json
 
 import babel
@@ -67,6 +63,9 @@ class Artist(db.Model):
     genres = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
+    website = db.Column(db.String(500),nullable=True)
+    seeking_venue = db.Column(db.Boolean, default=True) 
+    seeking_description = db.Column(db.String(200), nullable=True) 
     shows = db.relationship('Shows', backref="Artist",lazy=True)
 
 
@@ -294,10 +293,10 @@ def show_artist(artist_id):
     "city": artist_data.city,
     "state": artist_data.state,
     "phone": artist_data.phone,
-    #website": artist_data.website,
+    "website": artist_data.website,
     "facebook_link": artist_data.facebook_link,
-    #"seeking_venue": artist_data.seeking_venue,
-    #"seeking_description": artist_data.seeking_description,
+    "seeking_venue": artist_data.seeking_venue,
+    "seeking_description": artist_data.seeking_description,
     "image_link": artist_data.image_link,
     "past_shows": pastShows,
     "upcoming_shows": futureShows,
