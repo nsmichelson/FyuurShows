@@ -83,13 +83,15 @@ class Shows(db.Model):
         artist_name = Artist.query.filter(Artist.id==self.artist_id).first().name
         venue = Venue.query.filter(Venue.id==self.venue_id).first().name
         print("In Serialize and here is artist name and venue:",artist_name,venue)
+        artist_image_link = Artist.query.filter(Artist.id==self.artist_id).first().image_link
         return {
             'id':self.id,
             'start_time': self.start_time,
             'venue_id': self.venue_id,
             'artist_id': self.artist_id,
             'artist_name': artist_name,
-            'venue_name': venue
+            'venue_name': venue,
+            "arist_image_link":artist_image_link
         }
 
 #----------------------------------------------------------------------------#
@@ -382,6 +384,7 @@ def edit_venue_submission(venue_id):
   genres = request.form['genres']
   city = request.form['city']
   state = request.form['state']
+  image_link = request.form['image_link']
 
   try:
       venueToEdit = Venue.query.get(venue_id)
@@ -391,6 +394,7 @@ def edit_venue_submission(venue_id):
       venueToEdit.genres = genres
       venueToEdit.city = city
       venueToEdit.state = state
+      venueToEdit.image_link = image_link
       db.session.add(venueToEdit)
       db.session.commit()
       flash('Venue ' + request.form['name'] + ' was successfully listed!')
