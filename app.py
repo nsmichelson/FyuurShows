@@ -91,7 +91,7 @@ class Shows(db.Model):
             'artist_id': self.artist_id,
             'artist_name': artist_name,
             'venue_name': venue,
-            "arist_image_link":artist_image_link
+            "artist_image_link":artist_image_link
         }
 
 #----------------------------------------------------------------------------#
@@ -147,6 +147,7 @@ def show_venue(venue_id):
     venue = Venue.query.get(venue_id)
     showData = []    
     for show in venue.shows:
+        print("HERE IS THE SERIALIZEEEEEEEEEEEEEEEED SHOW",show.serialize())
         showData.append(show.serialize())
 
     today = datetime.today().date()
@@ -160,6 +161,7 @@ def show_venue(venue_id):
         if show['start_time'] > today:
             futureShows.append(show)
         else:
+            print("POP CRACKLE POP:",show)
             pastShows.append(show)
 
     data = {
@@ -170,7 +172,6 @@ def show_venue(venue_id):
     "city": venue.city,
     "state": venue.state,
     "phone": venue.phone,
-    #"shows":showData,
     #"website": venue.website,
     "facebook_link": venue.facebook_link,
     #"seeking_talent": venue.seeking_talent,
@@ -181,8 +182,7 @@ def show_venue(venue_id):
     "past_shows_count": len(pastShows),
     "upcoming_shows_count": len(futureShows)
     }
-    print("This is what we have as teh data for this venue!",data)
-    print("And image link specifically:",type(data['image_link']))
+    
     return render_template('pages/show_venue.html', venue=data)
  
 #  Create Venue
