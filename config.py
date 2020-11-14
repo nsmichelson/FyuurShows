@@ -19,3 +19,5 @@ SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@localhost:5432/musicSi
 #app = Flask('app.py')
 app.config['SQLALCHEMY_DATABASE_URI']= SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= False
+#app.config['ENV'] = 'development'
+#app.config['DEBUG'] = True

@@ -34,6 +34,10 @@
         {{ form.genres(class_ = 'form-control', placeholder=venue.genres, autofocus = true) }}
       </div>
       <div class="form-group">
+        <label for="seeking_talent">Seeking Talent?</label>
+        {{ form.seeking_talent(class_ = 'form-control', autofocus = true) }}
+      </div>
+      <div class="form-group">
         <label for="image_link">Venue Image Link</label>
         {{ form.image_link(class_ = 'form-control', placeholder='http://', autofocus = true) }}
       </div>

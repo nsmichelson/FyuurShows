@@ -198,6 +198,7 @@ def create_venue_submission():
   city = request.form['city']
   state = request.form['state']
   image_link=request.form['image_link']
+  seeking_talent=request.form['seeking_talent']
 
   try:
       newVenue = Venue()
@@ -207,6 +208,7 @@ def create_venue_submission():
       newVenue.genres = genres
       newVenue.city = city
       newVenue.state = state
+      newVenue.seeking_talent = seeking_talent
       newVenue.image_link = image_link
       db.session.add(newVenue)
       db.session.commit()
@@ -373,6 +375,7 @@ def edit_venue_submission(venue_id):
   city = request.form['city']
   state = request.form['state']
   image_link = request.form['image_link']
+  seeking_talent=request.form['seeking_talent']
 
   try:
       venueToEdit = Venue.query.get(venue_id)
@@ -383,6 +386,7 @@ def edit_venue_submission(venue_id):
       venueToEdit.city = city
       venueToEdit.state = state
       venueToEdit.image_link = image_link
+      venueToEdit.seeking_talent = seeking_talent
       db.session.add(venueToEdit)
       db.session.commit()
       flash('Venue ' + request.form['name'] + ' was successfully listed!')
