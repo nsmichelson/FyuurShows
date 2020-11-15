@@ -84,7 +84,7 @@ class Shows(db.Model):
         artist_name = Artist.query.filter(Artist.id==self.artist_id).first().name
         venue_name = Venue.query.filter(Venue.id==self.venue_id).first().name
         artist_image_link = Artist.query.filter(Artist.id==self.artist_id).first().image_link
-        
+        venue_image_link = Venue.query.filter(Venue.id==self.venue_id).first().image_link
         return {
             'id':self.id,
             'start_time': self.start_time,
@@ -92,7 +92,8 @@ class Shows(db.Model):
             'artist_id': self.artist_id,
             'artist_name': artist_name,
             'venue_name': venue_name,
-            "artist_image_link":artist_image_link
+            "artist_image_link":artist_image_link,
+            "venue_image_link":venue_image_link
         }
 
 #----------------------------------------------------------------------------#

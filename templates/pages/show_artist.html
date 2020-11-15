@@ -40,7 +40,7 @@
 		{% endif %}
 	</div>
 	<div class="col-sm-6">
-		<img src="{{ url_for('static', filename=artist.image_link) }}" alt="Artist Image" />
+		<img src="{{ artist.image_link }}" alt="Artist Image" />
 	</div>
 </div>
 <section>
@@ -49,7 +49,7 @@
 		{%for show in artist.upcoming_shows %}
 		<div class="col-sm-4">
 			<div class="tile tile-show">
-				<img src="{{ venue.image_link }}" alt="Show Venue Image" />
+				<img src="{{ show.venue_image_link }}" alt="Show Venue Image" />
 				<h5><a href="/venues/{{ show.venue_id }}">{{ show.venue_name }}</a></h5>
 				<h6>{{ show.start_time }}</h6>
 			</div>
