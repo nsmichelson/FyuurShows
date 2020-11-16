@@ -113,8 +113,7 @@ class Shows(db.Model):
 def index():
   return render_template('pages/home.html')
 
-#have a theory about it going trhough flask and not being able to directly fetch an image from 
-# a file even if a legit route in the folder structure
+
 @app.route('/images/<image_file>')
 def image(image_file):
     image_link = '/images/' + str(image_file)
@@ -151,9 +150,8 @@ def show_venue(venue_id):
     today = datetime.today().date()
     futureShows = []
     pastShows = []
-    #find the shows that were past vs upcoming
-    #datetime.datetime to datetime.date
-    
+    #Is this the best way to do this?  Or was there a way to get this via serialize function?
+
     for show in showData:
         if show['start_time'] > today:
             futureShows.append(show)
@@ -191,32 +189,15 @@ def create_venue_form():
 
 @app.route('/venues/create', methods=['POST'])
 def create_venue_submission():
-  #is this right????
-  
-  print("This is request.form name",request.form)
 
-#thinking the below stuff doesn't wokr since I'm initializing a new instance of venue form which
-#is not the same one that set up for the creation of venue
-#  form = VenueForm()
-#  if not form.validate():
-#      print("this is form.validate:",form.validate())
-#      flash('Form could not be validated!') 
-#      return render_template('forms/new_venue.html', form=form)
 
   name = request.form['name']
-  print("name is",name)
   address = request.form['address']
-  print("address is",address)
   phone = request.form['phone']
-  print("phone is",phone)
   genres = request.form['genres']
-  print("genres is",genres)
   city = request.form['city']
-  print("city is",city)
   state = request.form['state']
-  print("state is",state)
   image_link=request.form['image_link']
-  print("image_link is",image_link)
   
   try:
     boom = request.form['seeking_talent']

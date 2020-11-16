@@ -80,7 +80,7 @@ class ShowForm(Form):
 
 class VenueForm(Form):
     name = StringField(
-        'name', validators=[DataRequired(), Length(min=2)]
+        'name', validators=[Length(min=2,max=50,message="Need at least 2 characters")]
     )
     city = StringField(
         'city', validators=[DataRequired()]
