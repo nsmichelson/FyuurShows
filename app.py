@@ -23,7 +23,6 @@ from datetime import datetime
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
-
 app = Flask(__name__)
 moment = Moment(app)
 app.config.from_object('config')
@@ -182,52 +181,58 @@ def show_venue(venue_id):
 #  Create Venue
 #  ----------------------------------------------------------------
 
-@app.route('/venues/create', methods=['GET'])
-def create_venue_form():
-  form = VenueForm()
-  return render_template('forms/new_venue.html', form=form)
+#@app.route('/venues/create', methods=['GET'])
+#def create_venue_form():
+  
 
-@app.route('/venues/create', methods=['POST'])
+@app.route('/venues/create', methods=['GET','POST'])
 def create_venue_submission():
 
+  form = VenueForm()
 
-  name = request.form['name']
-  address = request.form['address']
-  phone = request.form['phone']
-  genres = request.form['genres']
-  city = request.form['city']
-  state = request.form['state']
-  image_link=request.form['image_link']
-  
-  try:
-    boom = request.form['seeking_talent']
-    seeking_talent=True
-  except:
-    seeking_talent=False
+  if request.method=="GET":
+      
+      return render_template('forms/new_venue.html', form=form)
 
-  try:
-      newVenue = Venue()
-      newVenue.name = name
-      newVenue.address = address
-      newVenue.phone = phone
-      newVenue.genres = genres
-      newVenue.city = city
-      print("just checking!")
-      newVenue.state = state
-      newVenue.seeking_talent = seeking_talent
-      newVenue.image_link = image_link
-      db.session.add(newVenue)
-      db.session.commit()
-      flash('Venue ' + request.form['name'] + ' was successfully listed!')
+  if request.method=="POST":
+      if form.validate()==False:
+          print("WOW- no no no",form.validate())
+          flash( form.errors )
+          return redirect(url_for('create_venue_submission'))
+      else:
+          name = request.form['name']
+          address = request.form['address']
+          phone = request.form['phone']
+          genres = request.form['genres']
+          city = request.form['city']
+          state = request.form['state']
+          image_link=request.form['image_link']
+          try:
+              boom = request.form['seeking_talent']
+              seeking_talent=True
+          except:
+              seeking_talent=False
+          try:
+              newVenue = Venue()
+              newVenue.name = name
+              newVenue.address = address
+              newVenue.phone = phone
+              newVenue.genres = genres
+              newVenue.city = city
+              newVenue.state = state
+              newVenue.seeking_talent = seeking_talent
+              newVenue.image_link = image_link
+              db.session.add(newVenue)
+              db.session.commit()
+              flash('Venue ' + request.form['name'] + ' was successfully listed!')
 
-  except:
-      print("something went wrong")
-      db.session.rollback()
-      flash('An error occured! Venue ' + request.form['name'] + ' could not be listed')
-  finally:
-      db.session.close()
-
-  return render_template('pages/home.html')
+          except:
+              print("something went wrong")
+              db.session.rollback()
+              flash('An error occured! Venue ' + request.form['name'] + ' could not be listed')
+          finally:
+              db.session.close()
+          return render_template('pages/home.html')
 
 
 

@@ -156,7 +156,7 @@ class VenueForm(Form):
         choices=genre_choices
     )
     facebook_link = StringField(
-        'facebook_link', validators=[URL()]
+        'facebook_link'
     )
     seeking_talent= BooleanField('Seeking Talent?', default=False)
 
