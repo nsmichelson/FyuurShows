@@ -70,7 +70,7 @@ class ShowForm(Form):
     )
     venue_id = StringField(
         'venue_id',
-        validators=[DataRequired()]
+        validators=[DataRequired("Need to include a venue id!")]
     )
     start_time = DateTimeField(
         'start_time',
@@ -80,7 +80,7 @@ class ShowForm(Form):
 
 class VenueForm(Form):
     name = StringField(
-        'name', validators=[DataRequired()]
+        'name', validators=[DataRequired(), Length(min=2)]
     )
     city = StringField(
         'city', validators=[DataRequired()]
@@ -225,8 +225,8 @@ class ArtistForm(Form):
     )
     phone = StringField(
         # TODO implement validation logic for state
-        'phone'
-    )
+        'phone', validators=[DataRequired(), Length(min= 7, message ="Not a valid phone number")])
+    
     image_link = StringField(
         'image_link',validators=[URL()]
     )

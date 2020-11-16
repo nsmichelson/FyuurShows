@@ -194,6 +194,9 @@ def create_venue_submission():
   #is this right????
   
   print("This is request.form name",request.form)
+
+#thinking the below stuff doesn't wokr since I'm initializing a new instance of venue form which
+#is not the same one that set up for the creation of venue
 #  form = VenueForm()
 #  if not form.validate():
 #      print("this is form.validate:",form.validate())
