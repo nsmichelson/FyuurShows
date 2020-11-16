@@ -1,17 +1,73 @@
 from datetime import datetime
 from flask_wtf import Form
 from wtforms import BooleanField,StringField, SelectField, SelectMultipleField, DateTimeField
-from wtforms.validators import DataRequired, AnyOf, URL
+from wtforms.validators import DataRequired, Length, AnyOf, URL, InputRequired, ValidationError
+#from enums import State, Genre
 
-# TODO IMPLEMENT NEW ARTIST FORM AND NEW SHOW FORM
+genre_choices=[('Alternative', 'Alternative'),
+            ('Blues', 'Blues'),
+            ('Classical', 'Classical'),
+            ('Country', 'Country'),
+            ('Electronic', 'Electronic'),
+            ('Folk', 'Folk'),
+            ('Funk', 'Funk'),
+            ('Hip-Hop', 'Hip-Hop'),
+            ('Heavy Metal', 'Heavy Metal'),
+            ('Instrumental', 'Instrumental'),
+            ('Jazz', 'Jazz'),
+            ('Musical Theatre', 'Musical Theatre'),
+            ('Pop', 'Pop'),
+            ('Punk', 'Punk'),
+            ('R&B', 'R&B'),
+            ('Reggae', 'Reggae'),
+            ('Rock n Roll', 'Rock n Roll'),
+            ('Soul', 'Soul'),
+            ('Other', 'Other')]
 
+genre_choices_valid=[('Alternative', 'Alternative'),
+            ('Blues', 'Blues'),
+            ('Classical', 'Classical'),
+            ('Country', 'Country'),
+            ('Electronic', 'Electronic'),
+            ('Folk', 'Folk'),
+            ('Funk', 'Funk'),
+            ('Hip-Hop', 'Hip-Hop'),
+            ('Heavy Metal', 'Heavy Metal'),
+            ('Instrumental', 'Instrumental'),
+            ('Jazz', 'Jazz'),
+            ('Musical Theatre', 'Musical Theatre'),
+            ('Pop', 'Pop'),
+            ('Punk', 'Punk'),
+            ('R&B', 'R&B'),
+            ('Reggae', 'Reggae'),
+            ('Rock n Roll', 'Rock n Roll'),
+            ('Soul', 'Soul')]
+
+def anyof_for_multiple_field(values):
+  message = 'Invalid value, must be one of'
+  #: {0}.'.format( ','.join(values) )
+  def _validate(form, field):
+    error = False
+    sortedValues = [choice[1] for choice in values]
+    for value in field.data:
+      print("This is the value looking at",value)
+      print(value==sortedValues[0])
+      if value not in sortedValues:
+        print("This",value,"NOT NOT NOT NOT in",sortedValues)
+        error = True
+    if error:
+        print("inside custom validator and there is an errror")
+        raise ValidationError(message)
+  return _validate
 
 class ShowForm(Form):
     artist_id = StringField(
-        'artist_id'
+        'artist_id',
+        validators=[DataRequired()]
     )
     venue_id = StringField(
-        'venue_id'
+        'venue_id',
+        validators=[DataRequired()]
     )
     start_time = DateTimeField(
         'start_time',
@@ -93,28 +149,8 @@ class VenueForm(Form):
     )
     genres = SelectMultipleField(
         # TODO implement enum restriction
-        'genres', validators=[DataRequired()],
-        choices=[
-            ('Alternative', 'Alternative'),
-            ('Blues', 'Blues'),
-            ('Classical', 'Classical'),
-            ('Country', 'Country'),
-            ('Electronic', 'Electronic'),
-            ('Folk', 'Folk'),
-            ('Funk', 'Funk'),
-            ('Hip-Hop', 'Hip-Hop'),
-            ('Heavy Metal', 'Heavy Metal'),
-            ('Instrumental', 'Instrumental'),
-            ('Jazz', 'Jazz'),
-            ('Musical Theatre', 'Musical Theatre'),
-            ('Pop', 'Pop'),
-            ('Punk', 'Punk'),
-            ('R&B', 'R&B'),
-            ('Reggae', 'Reggae'),
-            ('Rock n Roll', 'Rock n Roll'),
-            ('Soul', 'Soul'),
-            ('Other', 'Other'),
-        ]
+        'genres', validators=[DataRequired(),anyof_for_multiple_field(genre_choices)],
+        choices=genre_choices
     )
     facebook_link = StringField(
         'facebook_link', validators=[URL()]
@@ -189,7 +225,7 @@ class ArtistForm(Form):
         'phone'
     )
     image_link = StringField(
-        'image_link'
+        'image_link',validators=[URL()]
     )
     genres = SelectMultipleField(
         # TODO implement enum restriction
@@ -222,4 +258,5 @@ class ArtistForm(Form):
     )
 
 
-# TODO IMPLEMENT NEW ARTIST FORM AND NEW SHOW FORM
+
+

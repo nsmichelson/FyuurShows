@@ -138,7 +138,6 @@ def search_venues():
     response={
     "results": response_results
     }
-    #jsoned_response= jsonify(response)
     return render_template('pages/search_venues.html', results=response, search_term=request.form.get('search_term', ''))
 
 
@@ -192,6 +191,14 @@ def create_venue_form():
 
 @app.route('/venues/create', methods=['POST'])
 def create_venue_submission():
+  #is this right????
+  
+  print("This is request.form",request.form)
+  form = VenueForm()
+  if not form.validate():
+    flash('Form could not be validated!')
+    return render_template('forms/new_venue.html', form=form)
+
   name = request.form['name']
   address = request.form['address']
   phone = request.form['phone']
@@ -383,12 +390,6 @@ def edit_venue_submission(venue_id):
     seeking_talent=True
   except:
     seeking_talent=False
-#  seeking_talent=request.form['seeking_talent']
-#  if seeking_talent:
-#      seeking_talent=True
-#  else:
-#      seeking_talent=False
-  print("This is the value we have retrieved for seeking talent!!!!!!!!!!!!!!!!!!!",seeking_talent)
 
   try:
       venueToEdit = Venue.query.get(venue_id)
@@ -405,7 +406,6 @@ def edit_venue_submission(venue_id):
       flash('Venue ' + request.form['name'] + ' was successfully listed!')
 
   except:
-      print("something went wrong")
       db.session.rollback()
       flash('An error occured! Venue ' + request.form['name'] + ' could not be listed')
   finally:
@@ -449,7 +449,6 @@ def create_artist_submission():
     return render_template('pages/home.html')
 
 
-
 #  Shows
 #  ----------------------------------------------------------------
 
@@ -465,7 +464,6 @@ def shows():
 
 @app.route('/shows/create')
 def create_shows():
-  # renders form. do not touch.
   form = ShowForm()
 
   return render_template('forms/new_show.html', form=form)

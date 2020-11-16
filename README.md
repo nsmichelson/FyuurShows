@@ -73,3 +73,8 @@ To start and run the local development server,
   ```
 
 4. Navigate to Home page [http://localhost:5000](http://localhost:5000)
+
+
+### Contributions
+
+Utilized the Udacity Knowledge hub for advice on parts of the project.  In particular utilized https://knowledge.udacity.com/questions/61746 thread to better understand how to set up a custom validator.
