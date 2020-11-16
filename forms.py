@@ -3,6 +3,7 @@ from flask_wtf import Form
 from wtforms import BooleanField,StringField, SelectField, SelectMultipleField, DateTimeField
 from wtforms.validators import DataRequired, Length, AnyOf, URL, InputRequired, ValidationError
 #from enums import State, Genre
+from flask import flash
 
 genre_choices=[
             ('Alternative', 'Alternative'),
@@ -58,6 +59,7 @@ def anyof_for_multiple_field(values):
         error = True
     if error:
         print("inside custom validator and there is an errror")
+        flash("Error!")
         raise ValidationError(message)
   return _validate
 
@@ -150,7 +152,7 @@ class VenueForm(Form):
     )
     genres = SelectMultipleField(
         # TODO implement enum restriction
-        'genres', validators=[DataRequired()],
+        'genres', validators=[anyof_for_multiple_field(genre_choices_valid), DataRequired()],
         choices=genre_choices
     )
     facebook_link = StringField(

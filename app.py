@@ -193,12 +193,12 @@ def create_venue_form():
 def create_venue_submission():
   #is this right????
   
-  print("This is request.form name",request.form['name'])
-  #form = VenueForm()
-  #if not form.validate():
-  #    print("this is form.validate:",form.validate)
-  #  flash('Form could not be validated!')
-  #  return render_template('forms/new_venue.html', form=form)
+  print("This is request.form name",request.form)
+#  form = VenueForm()
+#  if not form.validate():
+#      print("this is form.validate:",form.validate())
+#      flash('Form could not be validated!') 
+#      return render_template('forms/new_venue.html', form=form)
 
   name = request.form['name']
   print("name is",name)
@@ -214,8 +214,7 @@ def create_venue_submission():
   print("state is",state)
   image_link=request.form['image_link']
   print("image_link is",image_link)
-  seeking_talent=request.form['seeking_talent']
-  print("seeking_talent is",seeking_talent)
+  
   try:
     boom = request.form['seeking_talent']
     seeking_talent=True
@@ -232,7 +231,7 @@ def create_venue_submission():
       print("just checking!")
       newVenue.state = state
       newVenue.seeking_talent = seeking_talent
-      #newVenue.image_link = image_link
+      newVenue.image_link = image_link
       db.session.add(newVenue)
       db.session.commit()
       flash('Venue ' + request.form['name'] + ' was successfully listed!')
