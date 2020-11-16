@@ -4,7 +4,8 @@ from wtforms import BooleanField,StringField, SelectField, SelectMultipleField, 
 from wtforms.validators import DataRequired, Length, AnyOf, URL, InputRequired, ValidationError
 #from enums import State, Genre
 
-genre_choices=[('Alternative', 'Alternative'),
+genre_choices=[
+            ('Alternative', 'Alternative'),
             ('Blues', 'Blues'),
             ('Classical', 'Classical'),
             ('Country', 'Country'),
@@ -149,7 +150,7 @@ class VenueForm(Form):
     )
     genres = SelectMultipleField(
         # TODO implement enum restriction
-        'genres', validators=[DataRequired(),anyof_for_multiple_field(genre_choices)],
+        'genres', validators=[DataRequired()],
         choices=genre_choices
     )
     facebook_link = StringField(
