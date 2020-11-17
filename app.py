@@ -181,9 +181,6 @@ def show_venue(venue_id):
 #  Create Venue
 #  ----------------------------------------------------------------
 
-#@app.route('/venues/create', methods=['GET'])
-#def create_venue_form():
-  
 
 @app.route('/venues/create', methods=['GET','POST'])
 def create_venue_submission():
@@ -196,7 +193,6 @@ def create_venue_submission():
 
   if request.method=="POST":
       if form.validate()==False:
-          print("WOW- no no no",form.validate())
           flash( form.errors )
           return redirect(url_for('create_venue_submission'))
       else:
@@ -297,7 +293,6 @@ def show_artist(artist_id):
             futureShows.append(show)
         else:
             pastShows.append(show)
-
     
     data={
     "id": artist_data.id,
